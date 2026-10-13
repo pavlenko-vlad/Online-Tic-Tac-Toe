@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.15)
+project(TicTacToe C)
+
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
+if(MSVC)
+    add_compile_options(/W4)
+else()
+    add_compile_options(-Wall -Wextra)
+endif()
+
+add_executable(server src/server.c)
+add_executable(client src/client.c)
+
+if(WIN32)
+    target_link_libraries(server ws2_32)
+    target_link_libraries(client ws2_32)
+    # Статическая линковка для portable .exe (работает в MinGW и MSVC)
+    if(MINGW)
+        target_link_options(server PRIVATE -static -static-libgcc)
+        target_link_options(client PRIVATE -static -static-libgcc)
+    elseif(MSVC)
+        set_property(TARGET server PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
+        set_property(TARGET client PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
+    endif()
+endif()

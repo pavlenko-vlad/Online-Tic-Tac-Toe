@@ -130,6 +130,10 @@ int main(int argc, char **argv) {
 	bzero((char*)&servAddr, sizeof(servAddr));
 	servAddr.sin_family = AF_INET;
 	hp = gethostbyname(argv [1]);
+	if (hp == NULL) {
+		fprintf(stderr, "Не удалось разрешить имя хоста %s\n", argv[1]);
+		exit(1);
+	}
 
 	bcopy(hp -> h_addr, (char*)&servAddr.sin_addr, hp -> h_length);
 	servAddr.sin_port = htons(atoi(argv[2]));

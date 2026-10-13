@@ -2,6 +2,7 @@
 #define NET_H
 
 #ifdef _WIN32
+    #include <windows.h>
     #include <winsock2.h>
     #include <ws2tcpip.h>
     #pragma comment(lib, "ws2_32.lib")   
@@ -25,6 +26,13 @@
     #define SOCK_INVALID  (-1)
     #define sock_last_error() errno
 #endif
+
+static inline void console_setup_utf8(void) {
+#ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+#endif
+}
 
 static inline int net_init(void) {
 #ifdef _WIN32
